@@ -10,29 +10,28 @@ import ru.t1.java.demo.aop.HandlingResult;
 import ru.t1.java.demo.aop.LogException;
 import ru.t1.java.demo.aop.Track;
 import ru.t1.java.demo.kafka.KafkaClientProducer;
-import ru.t1.java.demo.model.dto.ClientDto;
-import ru.t1.java.demo.service.ClientService;
+import ru.t1.java.demo.model.dto.AccountDto;
+import ru.t1.java.demo.service.AccountService;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class ClientController {
+public class AccountController {
 
-    @Qualifier("clientServiceImpl")
-    private final ClientService clientService;
+    @Qualifier("accountServiceImpl")
+    private final AccountService accountService;
     private final KafkaClientProducer kafkaClientProducer;
-    @Value("${t1.kafka.topic.client_registration}")
+    @Value("${t1.kafka.topic.client_accounts}")
     private String topic;
 
     @LogException
     @Track
-    @GetMapping(value = "/parse-clients")
+    @GetMapping(value = "/parse-accounts")
     @HandlingResult
     public void parseSource() {
-        List<ClientDto> clientDtos = clientService.parseJson();
-        clientDtos.forEach(dto -> kafkaClientProducer.sendTo(topic, dto));
+        List<AccountDto> accountDtos = accountService.parseJson();
+        accountDtos.forEach(dto -> kafkaClientProducer.sendTo(topic, dto));
     }
-
 }

@@ -2,6 +2,7 @@ package ru.t1.java.demo.kafka;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -20,9 +21,10 @@ import java.util.List;
 @Component
 public class KafkaClientConsumer {
 
+    @Qualifier("clientServiceImpl")
     private final ClientService clientService;
 
-    @KafkaListener(id = "${t1.kafka.consumer.group-id}",
+    @KafkaListener(id = "${t1.kafka.consumer.client-consumer}",
             topics = "${t1.kafka.topic.client_registration}",
             containerFactory = "kafkaListenerContainerFactory")
     public void listener(@Payload List<ClientDto> messageList,
@@ -42,8 +44,6 @@ public class KafkaClientConsumer {
         } finally {
             ack.acknowledge();
         }
-
-
         log.debug("Client consumer: записи обработаны");
     }
 }
