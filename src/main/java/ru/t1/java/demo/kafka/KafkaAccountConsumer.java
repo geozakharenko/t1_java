@@ -32,12 +32,14 @@ public class KafkaAccountConsumer {
                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                          @Header(KafkaHeaders.RECEIVED_KEY) String key) {
         log.debug("Account consumer: Обработка новых сообщений");
-
+        try {
             List<Account> accounts = messageList.stream()
                     .map(AccountMapper::toEntity)
                     .toList();
             accountService.registerAccounts(accounts);
-
+        } finally {
+            ack.acknowledge();
+        }
         log.debug("Account consumer: записи обработаны");
     }
 }

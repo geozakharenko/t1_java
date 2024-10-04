@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.t1.java.demo.kafka.KafkaClientProducer;
+import ru.t1.java.demo.kafka.KafkaProducer;
 import ru.t1.java.demo.model.Client;
 import ru.t1.java.demo.model.dto.ClientDto;
 import ru.t1.java.demo.repository.ClientRepository;
@@ -21,14 +21,14 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository repository;
-    private final KafkaClientProducer kafkaClientProducer;
+    private final KafkaProducer kafkaProducer;
 
     @Override
     public void registerClients(List<Client> clients) {
         repository.saveAll(clients)
                 .stream()
                 .map(Client::getId)
-                .forEach(kafkaClientProducer::send);
+                .forEach(kafkaProducer::send);
     }
 
     @Override

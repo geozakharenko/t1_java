@@ -18,6 +18,7 @@ logging:
 
 t1:
   scan-path: ru.t1.java.demo
+  method-execution-threshold-ms: 5000
   kafka:
     bootstrap:
       server: localhost:9092
@@ -34,6 +35,8 @@ t1:
       client_id_registered: t1_demo_client_registered
       client_accounts: t1_demo_accounts
       client_transactions: t1_demo_transactions
+      metric_trace: t1_demo_metric_trace
+      error_trace: t1_demo_error_trace
 
     listener:
       poll-timeout: 1000

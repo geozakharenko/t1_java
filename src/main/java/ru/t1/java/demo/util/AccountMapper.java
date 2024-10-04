@@ -8,9 +8,6 @@ import ru.t1.java.demo.model.dto.AccountDto;
 public class AccountMapper {
 
     public static Account toEntity(AccountDto dto) {
-        if (dto.getClientId() == null) {
-//            throw new NullPointerException();
-        }
         return Account.builder()
                 .clientId(dto.getClientId())
                 .accountType(dto.getAccountType())

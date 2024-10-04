@@ -32,12 +32,14 @@ public class KafkaTransactionConsumer {
                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                          @Header(KafkaHeaders.RECEIVED_KEY) String key) {
         log.debug("Transaction consumer: Обработка новых сообщений");
-
+        try {
             List<Transaction> transactions = messageList.stream()
                     .map(TransactionMapper::toEntity)
                     .toList();
         transactionService.registerTransactions(transactions);
-
+        } finally {
+            ack.acknowledge();
+        }
         log.debug("Transaction consumer: записи обработаны");
     }
 }

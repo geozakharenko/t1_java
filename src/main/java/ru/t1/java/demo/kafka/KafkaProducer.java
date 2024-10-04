@@ -10,7 +10,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class KafkaClientProducer {
+public class KafkaProducer {
 
     private final KafkaTemplate template;
 

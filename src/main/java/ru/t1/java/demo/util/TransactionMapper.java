@@ -8,9 +8,6 @@ import ru.t1.java.demo.model.dto.TransactionDto;
 public class TransactionMapper {
 
     public static Transaction toEntity(TransactionDto dto) {
-        if (dto.getAccountId() == null) {
-//            throw new NullPointerException();
-        }
         return Transaction.builder()
                 .amount(dto.getAmount())
                 .clientId(dto.getClientId())
