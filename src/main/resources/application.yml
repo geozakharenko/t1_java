@@ -1,3 +1,5 @@
+spring.aop.proxy-target-class: true
+
 spring:
   application:
     name: t1-java-demo
@@ -10,6 +12,9 @@ spring:
     enabled: true
     change-log: db/changelog/db.changelog-master.xml
 
+security:
+  token: tstrs4g434wyhser5htstrs4g434wyhser5htstrs4g434wyhser5htstrs4g434wyhser5htstrs4g434wyhser5h
+  expiration: 86400000
 
 logging:
   level:
@@ -19,6 +24,10 @@ logging:
 t1:
   scan-path: ru.t1.java.demo
   method-execution-threshold-ms: 5000
+  schedule:
+    transaction:
+      resend:
+        period: 10000
   kafka:
     bootstrap:
       server: localhost:9092
@@ -26,6 +35,7 @@ t1:
       group-id: t1-demo
       account-consumer: t1-demo-account-consumer
       transaction-consumer: t1-demo-transaction-consumer
+      transaction-errors-consumer: t1-demo-transaction-errors-consumer
       client-consumer: t1-demo-client-consumer
       max.poll.records: 10
     producer:
@@ -37,6 +47,17 @@ t1:
       client_transactions: t1_demo_transactions
       metric_trace: t1_demo_metric_trace
       error_trace: t1_demo_error_trace
-
+      client_transaction_errors: t1_demo_client_transaction_errors
     listener:
       poll-timeout: 1000
+
+track:
+  errors-to-track: JsonParseException, IOException
+  kafka:
+    enabled: ${TRACK_KAFKA_LOG_ENABLED:true}
+    bootstrap-server: localhost:9092
+    data-source-error-topic: t1_demo_data_source_error
+    time-limit-exceed: t1_demo_time_limit_exceed
+  db:
+    enabled: false
+  time-limit-exceed: 1000

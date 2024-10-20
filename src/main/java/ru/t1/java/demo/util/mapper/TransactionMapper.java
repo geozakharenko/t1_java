@@ -1,4 +1,4 @@
-package ru.t1.java.demo.util;
+package ru.t1.java.demo.util.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.t1.java.demo.model.Transaction;
@@ -12,6 +12,7 @@ public class TransactionMapper {
                 .amount(dto.getAmount())
                 .clientId(dto.getClientId())
                 .accountId(dto.getAccountId())
+                .isCancelled(dto.getIsCancelled())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class TransactionMapper {
                 .amount(entity.getAmount())
                 .clientId(entity.getClientId())
                 .accountId(entity.getAccountId())
+                .isCancelled(entity.getIsCancelled())
                 .build();
     }
 }

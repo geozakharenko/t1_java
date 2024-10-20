@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import ru.t1.java.demo.model.Client;
 import ru.t1.java.demo.model.dto.ClientDto;
 import ru.t1.java.demo.service.ClientService;
-import ru.t1.java.demo.util.ClientMapper;
+import ru.t1.java.demo.util.mapper.ClientMapper;
 
 import java.util.List;
 
@@ -35,10 +35,11 @@ public class KafkaClientConsumer {
 
         try {
             List<Client> clients = messageList.stream()
-                    .map(dto -> {
+                    .map(ClientMapper::toEntity)
+                    /*.map(dto -> {
                         dto.setFirstName(key + "@" + dto.getFirstName());
                         return ClientMapper.toEntity(dto);
-                    })
+                    })*/
                     .toList();
             clientService.registerClients(clients);
         } finally {

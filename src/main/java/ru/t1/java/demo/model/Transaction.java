@@ -25,4 +25,7 @@ public class Transaction extends AbstractPersistable<Long> {
 
     @Column(name = "account_id")
     private Long accountId;
+
+    @Column(name = "is_cancelled")
+    private Boolean isCancelled;
 }
