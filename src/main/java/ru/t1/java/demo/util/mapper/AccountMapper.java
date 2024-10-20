@@ -1,4 +1,4 @@
-package ru.t1.java.demo.util;
+package ru.t1.java.demo.util.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.t1.java.demo.model.Account;
@@ -12,6 +12,7 @@ public class AccountMapper {
                 .clientId(dto.getClientId())
                 .accountType(dto.getAccountType())
                 .balance(dto.getBalance())
+                .isBlocked(dto.getIsBlocked())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class AccountMapper {
                 .clientId(entity.getClientId())
                 .accountType(entity.getAccountType())
                 .balance(entity.getBalance())
+                .isBlocked(entity.getIsBlocked())
                 .build();
     }
 }

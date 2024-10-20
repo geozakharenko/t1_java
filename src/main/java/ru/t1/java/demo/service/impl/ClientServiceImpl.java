@@ -32,16 +32,28 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDto> parseJson() {
-        ObjectMapper mapper = new ObjectMapper();
+    public Client registerClient(Client client) {
+        kafkaProducer.send(client.getId());
+        return repository.save(client);
+    }
 
+    @Override
+    public List<ClientDto> parseJson() {
+        log.info("Parsing json");
+        ObjectMapper mapper = new ObjectMapper();
         ClientDto[] clients = new ClientDto[0];
         try {
             clients = mapper.readValue(new File("src/main/resources/MOCK_DATA.json"), ClientDto[].class);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.warn("Exception: ", e);
         }
-
         return Arrays.asList(clients);
+    }
+
+    @Override
+    public void clearMiddleName(List<ClientDto> dtos) {
+        log.info("Clearing middle name");
+        dtos.forEach(dto -> dto.setMiddleName(null));
+        log.info("Done clearing middle name");
     }
 }

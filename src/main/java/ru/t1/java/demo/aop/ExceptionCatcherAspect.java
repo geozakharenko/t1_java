@@ -25,7 +25,7 @@ public class ExceptionCatcherAspect {
         this.kafkaProducer = kafkaProducer;
     }
 
-    @AfterThrowing(pointcut = "within(ru.t1.java.demo..*)",
+    @AfterThrowing(pointcut = "within(ru.t1.java.demo..*) && !within(ru.t1.java.demo.util..*)",
             throwing = "exception")
     public void catchException(JoinPoint joinPoint, Throwable exception) {
         ExceptionCatcherDto dto = new ExceptionCatcherDto();

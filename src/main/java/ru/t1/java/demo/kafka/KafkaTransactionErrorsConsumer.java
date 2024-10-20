@@ -9,36 +9,36 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import ru.t1.java.demo.model.Transaction;
-import ru.t1.java.demo.model.dto.TransactionDto;
+import ru.t1.java.demo.service.AccountService;
 import ru.t1.java.demo.service.TransactionService;
-import ru.t1.java.demo.util.mapper.TransactionMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class KafkaTransactionConsumer {
+public class KafkaTransactionErrorsConsumer {
 
     @Qualifier("transactionServiceImpl")
     private final TransactionService transactionService;
+    private final AccountService accountService;
 
-    @KafkaListener(id = "${t1.kafka.consumer.transaction-consumer}",
-            topics = "${t1.kafka.topic.client_transactions}",
-            containerFactory = "transactionKafkaListenerFactory")
-    public void listener(@Payload List<TransactionDto> messageList,
+    @KafkaListener(id = "${t1.kafka.consumer.transaction-errors-consumer}",
+            topics = "${t1.kafka.topic.client_transaction_errors}",
+            containerFactory = "transactionErrorsKafkaListenerFactory")
+    public void listener(@Payload List<Long> messageList,
                          Acknowledgment ack,
                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                          @Header(KafkaHeaders.RECEIVED_KEY) String key) {
         log.debug("Transaction consumer: Обработка новых сообщений");
         try {
-            List<Transaction> transactions = messageList.stream()
-                    .map(TransactionMapper::toEntity)
-                    .toList();
-
-        transactionService.registerTransactions(transactions);
+            for (Long ids : messageList) {
+                Transaction transaction = transactionService.getTransaction(ids);
+                if (Objects.nonNull(transaction))
+                    accountService.unlockAccount(transaction.getAccountId());
+            }
         } finally {
             ack.acknowledge();
         }
