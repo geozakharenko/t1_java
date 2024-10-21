@@ -59,7 +59,6 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Transaction getTransaction(Long transactionId) {
         return transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException(String.format("Транзакция с id %s не найдена", transactionId)));
@@ -83,7 +82,6 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<TransactionDto> parseJson() {
         ObjectMapper mapper = new ObjectMapper();
 
